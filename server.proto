@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+service SortService {
+  rpc DivideAndMerge(Array) returns (Array){}
+
+  rpc SortArray(Array) returns (Array){}
+
+}
+
+message Array {
+  repeated int32 data = 1;
+}
+
+
