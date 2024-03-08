@@ -19,16 +19,19 @@ def sort_array(subarray):
 
 class SortService(sgrpc.SortServiceServicer):
     def SortArray(self, request, context):
+        # Asignacion del subarreglo a la parte de la informacion que contiene la cadena de numeros
         received_subarray = request.data
         print("Subarreglo recibido: ", received_subarray)
 
         sorted_subarray = sort_array(received_subarray)
         print("Subarreglo ordenado: ", sorted_subarray)
 
+        # Envío del subbarreglo convertido para el rpc
         return spb2.Array(data=sorted_subarray)
 
 
 def serve(num_operationserver):
+    # Definicion y creación del servidor
     puerto = 12345 + num_operationserver
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     sgrpc.add_SortServiceServicer_to_server(SortService(), server)

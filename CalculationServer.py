@@ -7,6 +7,7 @@ operationServer1 = 'localhost:12346'
 operationServer2 = 'localhost:12347'
 
 
+# Envío de un subarreglo a un servidor de operación
 def send_subarray(os, subarray):
     with grpc.insecure_channel(os) as channel:
         stub = sgrpc.SortServiceStub(channel)
@@ -14,6 +15,7 @@ def send_subarray(os, subarray):
     return subarray.data
 
 
+# Envio de los subarreglos a los servidores de operacion con tolerancia a fallos
 def divide(top, bottom):
     try:
         top = send_subarray(operationServer1, top)
@@ -53,6 +55,7 @@ def joint_arrays(arr1, arr2):
 
 class SortService(sgrpc.SortServiceServicer):
     def DivideAndMerge(self, request, context):
+        # Conversion de los datos a un arreglo de python
         received_array = request.data
         print("Arreglo recibido: ", received_array)
 
@@ -64,10 +67,12 @@ class SortService(sgrpc.SortServiceServicer):
         sorted_array = joint_arrays(results[0], results[1])
         print("Arreglo ordenado: ", sorted_array)
 
+        # Envío del arreglo al cliente convertido a un arreglo soportado por el rpc
         return spb2.Array(data=sorted_array)
 
 
 def serve():
+    # Creacion del servidor
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     sgrpc.add_SortServiceServicer_to_server(SortService(), server)
     server.add_insecure_port("[::]:12345")

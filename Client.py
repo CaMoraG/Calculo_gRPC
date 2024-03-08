@@ -5,9 +5,11 @@ import server_pb2_grpc as sgrpc
 
 def run(array):
     print("Arreglo sin ordenar: ", array)
+    # Conexión con el servidor de calculo
     with grpc.insecure_channel('localhost:12345') as channel:
         stub = sgrpc.SortServiceStub(channel)
         response = stub.DivideAndMerge(spb2.Array(data=array))
+        # Impresion del arreglo, accediendo al arreglo de la información recibida
         print("Arreglo ordenado:", response.data)
 
 
