@@ -3,8 +3,8 @@ import grpc
 import server_pb2 as spb2
 import server_pb2_grpc as sgrpc
 
-operationServer1 = 'localhost:12346'
-operationServer2 = 'localhost:12347'
+operationServer1 = '10.43.103.37:12346'
+operationServer2 = '10.43.100.149:12347'
 
 
 # Envío de un subarreglo a un servidor de operación
@@ -19,13 +19,13 @@ def send_subarray(os, subarray):
 def divide(top, bottom):
     try:
         top = send_subarray(operationServer1, top)
-    except grpc.RpcError as e:
-        print("Error OperationServer1: ", e)
+    except grpc.RpcError:
+        print("Error OperationServer1: Servidor de operacion 1 no se encuentra disponible")
         top = send_subarray(operationServer2, top)
     try:
         bottom = send_subarray(operationServer2, bottom)
-    except grpc.RpcError as e:
-        print("Error OperationServer2: ", e)
+    except grpc.RpcError:
+        print("Error OperationServer2: Servidor de operacion 2 no se encuentra disponible")
         bottom = send_subarray(operationServer1, bottom)
 
     return top, bottom
