@@ -6,7 +6,6 @@ import server_pb2_grpc as sgrpc
 operationServer1 = '10.43.103.37:12346'
 operationServer2 = '10.43.100.149:12347'
 
-
 # Envío de un subarreglo a un servidor de operación
 def send_subarray(os, subarray):
     with grpc.insecure_channel(os) as channel:
